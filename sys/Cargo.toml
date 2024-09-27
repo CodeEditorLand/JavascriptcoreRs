@@ -32,11 +32,11 @@ libc = "0.2"
 
 [dependencies.glib]
 package = "glib-sys"
-version = "^0.18"
+version = 0.18"
 
 [dependencies.gobject]
 package = "gobject-sys"
-version = "^0.18"
+version = 0.18"
 
 [build-dependencies]
 system-deps = "6"

@@ -1,6 +1,7 @@
 [submodule "gir-files"]
-	path = gir-files
-	url = https://github.com/tauri-apps/gir-files
+path = gir-files
+url = ssh://git@github.com/CodeEditorLand/GirFiles.git
+
 [submodule "gir"]
-	path = gir
-	url = https://github.com/gtk-rs/gir
+path = gir
+url = ssh://git@github.com/CodeEditorLand/Gir.git

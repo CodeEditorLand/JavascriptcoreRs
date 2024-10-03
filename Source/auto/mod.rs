@@ -21,24 +21,19 @@ mod weak_value;
 pub use self::weak_value::WeakValue;
 
 mod enums;
-pub use self::enums::CheckSyntaxMode;
-pub use self::enums::CheckSyntaxResult;
-pub use self::enums::OptionType;
 #[cfg(feature = "v2_38")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v2_38")))]
 pub use self::enums::TypedArrayType;
+pub use self::enums::{CheckSyntaxMode, CheckSyntaxResult, OptionType};
 
 mod flags;
 pub use self::flags::ValuePropertyFlags;
 
 pub(crate) mod traits {
-  pub use super::context::ContextExt;
-  pub use super::exception::ExceptionExt;
-  pub use super::value::ValueExt;
-  pub use super::weak_value::WeakValueExt;
+	pub use super::{
+		context::ContextExt, exception::ExceptionExt, value::ValueExt, weak_value::WeakValueExt,
+	};
 }
 pub(crate) mod builders {
-  pub use super::context::ContextBuilder;
-  pub use super::value::ValueBuilder;
-  pub use super::weak_value::WeakValueBuilder;
+	pub use super::{context::ContextBuilder, value::ValueBuilder, weak_value::WeakValueBuilder};
 }

@@ -33,7 +33,7 @@ impl IntoGlib for CheckSyntaxMode {
 #[doc(hidden)]
 impl FromGlib<ffi::JSCCheckSyntaxMode> for CheckSyntaxMode {
 	#[inline]
-	unsafe fn from_glib(value: ffi::JSCCheckSyntaxMode) -> Self {
+	unsafe fn from_glib(value:ffi::JSCCheckSyntaxMode) -> Self {
 		match value {
 			ffi::JSC_CHECK_SYNTAX_MODE_SCRIPT => Self::Script,
 			ffi::JSC_CHECK_SYNTAX_MODE_MODULE => Self::Module,
@@ -70,13 +70,21 @@ impl IntoGlib for CheckSyntaxResult {
 	fn into_glib(self) -> ffi::JSCCheckSyntaxResult {
 		match self {
 			Self::Success => ffi::JSC_CHECK_SYNTAX_RESULT_SUCCESS,
-			Self::RecoverableError => ffi::JSC_CHECK_SYNTAX_RESULT_RECOVERABLE_ERROR,
-			Self::IrrecoverableError => ffi::JSC_CHECK_SYNTAX_RESULT_IRRECOVERABLE_ERROR,
+			Self::RecoverableError => {
+				ffi::JSC_CHECK_SYNTAX_RESULT_RECOVERABLE_ERROR
+			},
+			Self::IrrecoverableError => {
+				ffi::JSC_CHECK_SYNTAX_RESULT_IRRECOVERABLE_ERROR
+			},
 			Self::UnterminatedLiteralError => {
 				ffi::JSC_CHECK_SYNTAX_RESULT_UNTERMINATED_LITERAL_ERROR
-			}
-			Self::OutOfMemoryError => ffi::JSC_CHECK_SYNTAX_RESULT_OUT_OF_MEMORY_ERROR,
-			Self::StackOverflowError => ffi::JSC_CHECK_SYNTAX_RESULT_STACK_OVERFLOW_ERROR,
+			},
+			Self::OutOfMemoryError => {
+				ffi::JSC_CHECK_SYNTAX_RESULT_OUT_OF_MEMORY_ERROR
+			},
+			Self::StackOverflowError => {
+				ffi::JSC_CHECK_SYNTAX_RESULT_STACK_OVERFLOW_ERROR
+			},
 			Self::__Unknown(value) => value,
 		}
 	}
@@ -85,16 +93,24 @@ impl IntoGlib for CheckSyntaxResult {
 #[doc(hidden)]
 impl FromGlib<ffi::JSCCheckSyntaxResult> for CheckSyntaxResult {
 	#[inline]
-	unsafe fn from_glib(value: ffi::JSCCheckSyntaxResult) -> Self {
+	unsafe fn from_glib(value:ffi::JSCCheckSyntaxResult) -> Self {
 		match value {
 			ffi::JSC_CHECK_SYNTAX_RESULT_SUCCESS => Self::Success,
-			ffi::JSC_CHECK_SYNTAX_RESULT_RECOVERABLE_ERROR => Self::RecoverableError,
-			ffi::JSC_CHECK_SYNTAX_RESULT_IRRECOVERABLE_ERROR => Self::IrrecoverableError,
+			ffi::JSC_CHECK_SYNTAX_RESULT_RECOVERABLE_ERROR => {
+				Self::RecoverableError
+			},
+			ffi::JSC_CHECK_SYNTAX_RESULT_IRRECOVERABLE_ERROR => {
+				Self::IrrecoverableError
+			},
 			ffi::JSC_CHECK_SYNTAX_RESULT_UNTERMINATED_LITERAL_ERROR => {
 				Self::UnterminatedLiteralError
-			}
-			ffi::JSC_CHECK_SYNTAX_RESULT_OUT_OF_MEMORY_ERROR => Self::OutOfMemoryError,
-			ffi::JSC_CHECK_SYNTAX_RESULT_STACK_OVERFLOW_ERROR => Self::StackOverflowError,
+			},
+			ffi::JSC_CHECK_SYNTAX_RESULT_OUT_OF_MEMORY_ERROR => {
+				Self::OutOfMemoryError
+			},
+			ffi::JSC_CHECK_SYNTAX_RESULT_STACK_OVERFLOW_ERROR => {
+				Self::StackOverflowError
+			},
 			value => Self::__Unknown(value),
 		}
 	}
@@ -144,7 +160,7 @@ impl IntoGlib for OptionType {
 #[doc(hidden)]
 impl FromGlib<ffi::JSCOptionType> for OptionType {
 	#[inline]
-	unsafe fn from_glib(value: ffi::JSCOptionType) -> Self {
+	unsafe fn from_glib(value:ffi::JSCOptionType) -> Self {
 		match value {
 			ffi::JSC_OPTION_BOOLEAN => Self::Boolean,
 			ffi::JSC_OPTION_INT => Self::Int,
@@ -223,7 +239,7 @@ impl IntoGlib for TypedArrayType {
 #[doc(hidden)]
 impl FromGlib<ffi::JSCTypedArrayType> for TypedArrayType {
 	#[inline]
-	unsafe fn from_glib(value: ffi::JSCTypedArrayType) -> Self {
+	unsafe fn from_glib(value:ffi::JSCTypedArrayType) -> Self {
 		match value {
 			ffi::JSC_TYPED_ARRAY_NONE => Self::None,
 			ffi::JSC_TYPED_ARRAY_INT8 => Self::Int8,

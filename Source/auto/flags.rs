@@ -22,15 +22,13 @@ impl IntoGlib for ValuePropertyFlags {
 	type GlibType = ffi::JSCValuePropertyFlags;
 
 	#[inline]
-	fn into_glib(self) -> ffi::JSCValuePropertyFlags {
-		self.bits()
-	}
+	fn into_glib(self) -> ffi::JSCValuePropertyFlags { self.bits() }
 }
 
 #[doc(hidden)]
 impl FromGlib<ffi::JSCValuePropertyFlags> for ValuePropertyFlags {
 	#[inline]
-	unsafe fn from_glib(value: ffi::JSCValuePropertyFlags) -> Self {
+	unsafe fn from_glib(value:ffi::JSCValuePropertyFlags) -> Self {
 		Self::from_bits_truncate(value)
 	}
 }

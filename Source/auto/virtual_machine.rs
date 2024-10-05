@@ -14,7 +14,7 @@ glib::wrapper! {
 }
 
 impl VirtualMachine {
-	pub const NONE: Option<&'static VirtualMachine> = None;
+	pub const NONE:Option<&'static VirtualMachine> = None;
 
 	#[doc(alias = "jsc_virtual_machine_new")]
 	pub fn new() -> VirtualMachine {
@@ -23,7 +23,5 @@ impl VirtualMachine {
 }
 
 impl Default for VirtualMachine {
-	fn default() -> Self {
-		Self::new()
-	}
+	fn default() -> Self { Self::new() }
 }

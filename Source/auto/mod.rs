@@ -31,9 +31,16 @@ pub use self::flags::ValuePropertyFlags;
 
 pub(crate) mod traits {
 	pub use super::{
-		context::ContextExt, exception::ExceptionExt, value::ValueExt, weak_value::WeakValueExt,
+		context::ContextExt,
+		exception::ExceptionExt,
+		value::ValueExt,
+		weak_value::WeakValueExt,
 	};
 }
 pub(crate) mod builders {
-	pub use super::{context::ContextBuilder, value::ValueBuilder, weak_value::WeakValueBuilder};
+	pub use super::{
+		context::ContextBuilder,
+		value::ValueBuilder,
+		weak_value::WeakValueBuilder,
+	};
 }

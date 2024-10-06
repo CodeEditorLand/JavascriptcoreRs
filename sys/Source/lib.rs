@@ -42,8 +42,7 @@ pub type JSCCheckSyntaxResult = c_int;
 pub const JSC_CHECK_SYNTAX_RESULT_SUCCESS:JSCCheckSyntaxResult = 0;
 pub const JSC_CHECK_SYNTAX_RESULT_RECOVERABLE_ERROR:JSCCheckSyntaxResult = 1;
 pub const JSC_CHECK_SYNTAX_RESULT_IRRECOVERABLE_ERROR:JSCCheckSyntaxResult = 2;
-pub const JSC_CHECK_SYNTAX_RESULT_UNTERMINATED_LITERAL_ERROR:
-	JSCCheckSyntaxResult = 3;
+pub const JSC_CHECK_SYNTAX_RESULT_UNTERMINATED_LITERAL_ERROR:JSCCheckSyntaxResult = 3;
 pub const JSC_CHECK_SYNTAX_RESULT_OUT_OF_MEMORY_ERROR:JSCCheckSyntaxResult = 4;
 pub const JSC_CHECK_SYNTAX_RESULT_STACK_OVERFLOW_ERROR:JSCCheckSyntaxResult = 5;
 
@@ -86,37 +85,15 @@ pub const JSC_VALUE_PROPERTY_ENUMERABLE:JSCValuePropertyFlags = 2;
 pub const JSC_VALUE_PROPERTY_WRITABLE:JSCValuePropertyFlags = 4;
 
 // Callbacks
-pub type JSCClassDeletePropertyFunction = Option<
-	unsafe extern fn(
-		*mut JSCClass,
-		*mut JSCContext,
-		gpointer,
-		*const c_char,
-	) -> gboolean,
->;
-pub type JSCClassEnumeratePropertiesFunction = Option<
-	unsafe extern fn(
-		*mut JSCClass,
-		*mut JSCContext,
-		gpointer,
-	) -> *mut *mut c_char,
->;
+pub type JSCClassDeletePropertyFunction =
+	Option<unsafe extern fn(*mut JSCClass, *mut JSCContext, gpointer, *const c_char) -> gboolean>;
+pub type JSCClassEnumeratePropertiesFunction =
+	Option<unsafe extern fn(*mut JSCClass, *mut JSCContext, gpointer) -> *mut *mut c_char>;
 pub type JSCClassGetPropertyFunction = Option<
-	unsafe extern fn(
-		*mut JSCClass,
-		*mut JSCContext,
-		gpointer,
-		*const c_char,
-	) -> *mut JSCValue,
+	unsafe extern fn(*mut JSCClass, *mut JSCContext, gpointer, *const c_char) -> *mut JSCValue,
 >;
-pub type JSCClassHasPropertyFunction = Option<
-	unsafe extern fn(
-		*mut JSCClass,
-		*mut JSCContext,
-		gpointer,
-		*const c_char,
-	) -> gboolean,
->;
+pub type JSCClassHasPropertyFunction =
+	Option<unsafe extern fn(*mut JSCClass, *mut JSCContext, gpointer, *const c_char) -> gboolean>;
 pub type JSCClassSetPropertyFunction = Option<
 	unsafe extern fn(
 		*mut JSCClass,
@@ -128,14 +105,8 @@ pub type JSCClassSetPropertyFunction = Option<
 >;
 pub type JSCExceptionHandler =
 	Option<unsafe extern fn(*mut JSCContext, *mut JSCException, gpointer)>;
-pub type JSCOptionsFunc = Option<
-	unsafe extern fn(
-		*const c_char,
-		JSCOptionType,
-		*const c_char,
-		gpointer,
-	) -> gboolean,
->;
+pub type JSCOptionsFunc =
+	Option<unsafe extern fn(*const c_char, JSCOptionType, *const c_char, gpointer) -> gboolean>;
 
 // Records
 #[repr(C)]
@@ -494,9 +465,7 @@ extern {
 	//=========================================================================
 	pub fn jsc_context_get_type() -> GType;
 	pub fn jsc_context_new() -> *mut JSCContext;
-	pub fn jsc_context_new_with_virtual_machine(
-		vm:*mut JSCVirtualMachine,
-	) -> *mut JSCContext;
+	pub fn jsc_context_new_with_virtual_machine(vm:*mut JSCVirtualMachine) -> *mut JSCContext;
 	pub fn jsc_context_get_current() -> *mut JSCContext;
 	pub fn jsc_context_check_syntax(
 		context:*mut JSCContext,
@@ -530,19 +499,10 @@ extern {
 		uri:*const c_char,
 		line_number:c_uint,
 	) -> *mut JSCValue;
-	pub fn jsc_context_get_exception(
-		context:*mut JSCContext,
-	) -> *mut JSCException;
-	pub fn jsc_context_get_global_object(
-		context:*mut JSCContext,
-	) -> *mut JSCValue;
-	pub fn jsc_context_get_value(
-		context:*mut JSCContext,
-		name:*const c_char,
-	) -> *mut JSCValue;
-	pub fn jsc_context_get_virtual_machine(
-		context:*mut JSCContext,
-	) -> *mut JSCVirtualMachine;
+	pub fn jsc_context_get_exception(context:*mut JSCContext) -> *mut JSCException;
+	pub fn jsc_context_get_global_object(context:*mut JSCContext) -> *mut JSCValue;
+	pub fn jsc_context_get_value(context:*mut JSCContext, name:*const c_char) -> *mut JSCValue;
+	pub fn jsc_context_get_virtual_machine(context:*mut JSCContext) -> *mut JSCVirtualMachine;
 	pub fn jsc_context_pop_exception_handler(context:*mut JSCContext);
 	pub fn jsc_context_push_exception_handler(
 		context:*mut JSCContext,
@@ -557,24 +517,10 @@ extern {
 		vtable:*mut JSCClassVTable,
 		destroy_notify:glib::GDestroyNotify,
 	) -> *mut JSCClass;
-	pub fn jsc_context_set_value(
-		context:*mut JSCContext,
-		name:*const c_char,
-		value:*mut JSCValue,
-	);
-	pub fn jsc_context_throw(
-		context:*mut JSCContext,
-		error_message:*const c_char,
-	);
-	pub fn jsc_context_throw_exception(
-		context:*mut JSCContext,
-		exception:*mut JSCException,
-	);
-	pub fn jsc_context_throw_printf(
-		context:*mut JSCContext,
-		format:*const c_char,
-		...
-	);
+	pub fn jsc_context_set_value(context:*mut JSCContext, name:*const c_char, value:*mut JSCValue);
+	pub fn jsc_context_throw(context:*mut JSCContext, error_message:*const c_char);
+	pub fn jsc_context_throw_exception(context:*mut JSCContext, exception:*mut JSCException);
+	pub fn jsc_context_throw_printf(context:*mut JSCContext, format:*const c_char, ...);
 	pub fn jsc_context_throw_with_name(
 		context:*mut JSCContext,
 		error_name:*const c_char,
@@ -591,10 +537,7 @@ extern {
 	// JSCException
 	//=========================================================================
 	pub fn jsc_exception_get_type() -> GType;
-	pub fn jsc_exception_new(
-		context:*mut JSCContext,
-		message:*const c_char,
-	) -> *mut JSCException;
+	pub fn jsc_exception_new(context:*mut JSCContext, message:*const c_char) -> *mut JSCException;
 	pub fn jsc_exception_new_printf(
 		context:*mut JSCContext,
 		format:*const c_char,
@@ -616,22 +559,12 @@ extern {
 	// pub fn jsc_exception_new_with_name_vprintf(context: *mut JSCContext,
 	// name: *const c_char, format: *const c_char, args:
 	// /*Unimplemented*/va_list) -> *mut JSCException;
-	pub fn jsc_exception_get_backtrace_string(
-		exception:*mut JSCException,
-	) -> *const c_char;
-	pub fn jsc_exception_get_column_number(
-		exception:*mut JSCException,
-	) -> c_uint;
-	pub fn jsc_exception_get_line_number(exception:*mut JSCException)
-	-> c_uint;
-	pub fn jsc_exception_get_message(
-		exception:*mut JSCException,
-	) -> *const c_char;
-	pub fn jsc_exception_get_name(exception:*mut JSCException)
-	-> *const c_char;
-	pub fn jsc_exception_get_source_uri(
-		exception:*mut JSCException,
-	) -> *const c_char;
+	pub fn jsc_exception_get_backtrace_string(exception:*mut JSCException) -> *const c_char;
+	pub fn jsc_exception_get_column_number(exception:*mut JSCException) -> c_uint;
+	pub fn jsc_exception_get_line_number(exception:*mut JSCException) -> c_uint;
+	pub fn jsc_exception_get_message(exception:*mut JSCException) -> *const c_char;
+	pub fn jsc_exception_get_name(exception:*mut JSCException) -> *const c_char;
+	pub fn jsc_exception_get_source_uri(exception:*mut JSCException) -> *const c_char;
 	pub fn jsc_exception_report(exception:*mut JSCException) -> *mut c_char;
 	pub fn jsc_exception_to_string(exception:*mut JSCException) -> *mut c_char;
 
@@ -661,16 +594,10 @@ extern {
 		context:*mut JSCContext,
 		strv:*const *const c_char,
 	) -> *mut JSCValue;
-	pub fn jsc_value_new_boolean(
-		context:*mut JSCContext,
-		value:gboolean,
-	) -> *mut JSCValue;
+	pub fn jsc_value_new_boolean(context:*mut JSCContext, value:gboolean) -> *mut JSCValue;
 	#[cfg(feature = "v2_28")]
 	#[cfg_attr(docsrs, doc(cfg(feature = "v2_28")))]
-	pub fn jsc_value_new_from_json(
-		context:*mut JSCContext,
-		json:*const c_char,
-	) -> *mut JSCValue;
+	pub fn jsc_value_new_from_json(context:*mut JSCContext, json:*const c_char) -> *mut JSCValue;
 	pub fn jsc_value_new_function(
 		context:*mut JSCContext,
 		name:*const c_char,
@@ -700,19 +627,13 @@ extern {
 		parameter_types:*mut GType,
 	) -> *mut JSCValue;
 	pub fn jsc_value_new_null(context:*mut JSCContext) -> *mut JSCValue;
-	pub fn jsc_value_new_number(
-		context:*mut JSCContext,
-		number:c_double,
-	) -> *mut JSCValue;
+	pub fn jsc_value_new_number(context:*mut JSCContext, number:c_double) -> *mut JSCValue;
 	pub fn jsc_value_new_object(
 		context:*mut JSCContext,
 		instance:gpointer,
 		jsc_class:*mut JSCClass,
 	) -> *mut JSCValue;
-	pub fn jsc_value_new_string(
-		context:*mut JSCContext,
-		string:*const c_char,
-	) -> *mut JSCValue;
+	pub fn jsc_value_new_string(context:*mut JSCContext, string:*const c_char) -> *mut JSCValue;
 	pub fn jsc_value_new_string_from_bytes(
 		context:*mut JSCContext,
 		bytes:*mut glib::GBytes,
@@ -727,10 +648,7 @@ extern {
 	pub fn jsc_value_new_undefined(context:*mut JSCContext) -> *mut JSCValue;
 	#[cfg(feature = "v2_38")]
 	#[cfg_attr(docsrs, doc(cfg(feature = "v2_38")))]
-	pub fn jsc_value_array_buffer_get_data(
-		value:*mut JSCValue,
-		size:*mut size_t,
-	) -> gpointer;
+	pub fn jsc_value_array_buffer_get_data(value:*mut JSCValue, size:*mut size_t) -> gpointer;
 	#[cfg(feature = "v2_38")]
 	#[cfg_attr(docsrs, doc(cfg(feature = "v2_38")))]
 	pub fn jsc_value_array_buffer_get_size(value:*mut JSCValue) -> size_t;
@@ -794,25 +712,14 @@ extern {
 		flags:JSCValuePropertyFlags,
 		property_value:*mut JSCValue,
 	);
-	pub fn jsc_value_object_delete_property(
-		value:*mut JSCValue,
-		name:*const c_char,
-	) -> gboolean;
-	pub fn jsc_value_object_enumerate_properties(
-		value:*mut JSCValue,
-	) -> *mut *mut c_char;
-	pub fn jsc_value_object_get_property(
-		value:*mut JSCValue,
-		name:*const c_char,
-	) -> *mut JSCValue;
+	pub fn jsc_value_object_delete_property(value:*mut JSCValue, name:*const c_char) -> gboolean;
+	pub fn jsc_value_object_enumerate_properties(value:*mut JSCValue) -> *mut *mut c_char;
+	pub fn jsc_value_object_get_property(value:*mut JSCValue, name:*const c_char) -> *mut JSCValue;
 	pub fn jsc_value_object_get_property_at_index(
 		value:*mut JSCValue,
 		index:c_uint,
 	) -> *mut JSCValue;
-	pub fn jsc_value_object_has_property(
-		value:*mut JSCValue,
-		name:*const c_char,
-	) -> gboolean;
+	pub fn jsc_value_object_has_property(value:*mut JSCValue, name:*const c_char) -> gboolean;
 	pub fn jsc_value_object_invoke_method(
 		value:*mut JSCValue,
 		name:*const c_char,
@@ -825,10 +732,7 @@ extern {
 		n_parameters:c_uint,
 		parameters:*mut *mut JSCValue,
 	) -> *mut JSCValue;
-	pub fn jsc_value_object_is_instance_of(
-		value:*mut JSCValue,
-		name:*const c_char,
-	) -> gboolean;
+	pub fn jsc_value_object_is_instance_of(value:*mut JSCValue, name:*const c_char) -> gboolean;
 	pub fn jsc_value_object_set_property(
 		value:*mut JSCValue,
 		name:*const c_char,
@@ -844,23 +748,15 @@ extern {
 	pub fn jsc_value_to_int32(value:*mut JSCValue) -> i32;
 	#[cfg(feature = "v2_28")]
 	#[cfg_attr(docsrs, doc(cfg(feature = "v2_28")))]
-	pub fn jsc_value_to_json(value:*mut JSCValue, indent:c_uint)
-	-> *mut c_char;
+	pub fn jsc_value_to_json(value:*mut JSCValue, indent:c_uint) -> *mut c_char;
 	pub fn jsc_value_to_string(value:*mut JSCValue) -> *mut c_char;
-	pub fn jsc_value_to_string_as_bytes(
-		value:*mut JSCValue,
-	) -> *mut glib::GBytes;
+	pub fn jsc_value_to_string_as_bytes(value:*mut JSCValue) -> *mut glib::GBytes;
 	#[cfg(feature = "v2_38")]
 	#[cfg_attr(docsrs, doc(cfg(feature = "v2_38")))]
-	pub fn jsc_value_typed_array_get_buffer(
-		value:*mut JSCValue,
-	) -> *mut JSCValue;
+	pub fn jsc_value_typed_array_get_buffer(value:*mut JSCValue) -> *mut JSCValue;
 	#[cfg(feature = "v2_38")]
 	#[cfg_attr(docsrs, doc(cfg(feature = "v2_38")))]
-	pub fn jsc_value_typed_array_get_data(
-		value:*mut JSCValue,
-		length:*mut size_t,
-	) -> gpointer;
+	pub fn jsc_value_typed_array_get_data(value:*mut JSCValue, length:*mut size_t) -> gpointer;
 	#[cfg(feature = "v2_38")]
 	#[cfg_attr(docsrs, doc(cfg(feature = "v2_38")))]
 	pub fn jsc_value_typed_array_get_length(value:*mut JSCValue) -> size_t;
@@ -872,9 +768,7 @@ extern {
 	pub fn jsc_value_typed_array_get_size(value:*mut JSCValue) -> size_t;
 	#[cfg(feature = "v2_38")]
 	#[cfg_attr(docsrs, doc(cfg(feature = "v2_38")))]
-	pub fn jsc_value_typed_array_get_type(
-		value:*mut JSCValue,
-	) -> JSCTypedArrayType;
+	pub fn jsc_value_typed_array_get_type(value:*mut JSCValue) -> JSCTypedArrayType;
 
 	//=========================================================================
 	// JSCVirtualMachine
@@ -887,9 +781,7 @@ extern {
 	//=========================================================================
 	pub fn jsc_weak_value_get_type() -> GType;
 	pub fn jsc_weak_value_new(value:*mut JSCValue) -> *mut JSCWeakValue;
-	pub fn jsc_weak_value_get_value(
-		weak_value:*mut JSCWeakValue,
-	) -> *mut JSCValue;
+	pub fn jsc_weak_value_get_value(weak_value:*mut JSCWeakValue) -> *mut JSCValue;
 
 	//=========================================================================
 	// Other functions
@@ -898,55 +790,20 @@ extern {
 	pub fn jsc_get_micro_version() -> c_uint;
 	pub fn jsc_get_minor_version() -> c_uint;
 	pub fn jsc_options_foreach(function:JSCOptionsFunc, user_data:gpointer);
-	pub fn jsc_options_get_boolean(
-		option:*const c_char,
-		value:*mut gboolean,
-	) -> gboolean;
-	pub fn jsc_options_get_double(
-		option:*const c_char,
-		value:*mut c_double,
-	) -> gboolean;
-	pub fn jsc_options_get_int(
-		option:*const c_char,
-		value:*mut c_int,
-	) -> gboolean;
+	pub fn jsc_options_get_boolean(option:*const c_char, value:*mut gboolean) -> gboolean;
+	pub fn jsc_options_get_double(option:*const c_char, value:*mut c_double) -> gboolean;
+	pub fn jsc_options_get_int(option:*const c_char, value:*mut c_int) -> gboolean;
 	pub fn jsc_options_get_option_group() -> *mut glib::GOptionGroup;
-	pub fn jsc_options_get_range_string(
-		option:*const c_char,
-		value:*mut *mut c_char,
-	) -> gboolean;
-	pub fn jsc_options_get_size(
-		option:*const c_char,
-		value:*mut size_t,
-	) -> gboolean;
-	pub fn jsc_options_get_string(
-		option:*const c_char,
-		value:*mut *mut c_char,
-	) -> gboolean;
-	pub fn jsc_options_get_uint(
-		option:*const c_char,
-		value:*mut c_uint,
-	) -> gboolean;
-	pub fn jsc_options_set_boolean(
-		option:*const c_char,
-		value:gboolean,
-	) -> gboolean;
-	pub fn jsc_options_set_double(
-		option:*const c_char,
-		value:c_double,
-	) -> gboolean;
+	pub fn jsc_options_get_range_string(option:*const c_char, value:*mut *mut c_char) -> gboolean;
+	pub fn jsc_options_get_size(option:*const c_char, value:*mut size_t) -> gboolean;
+	pub fn jsc_options_get_string(option:*const c_char, value:*mut *mut c_char) -> gboolean;
+	pub fn jsc_options_get_uint(option:*const c_char, value:*mut c_uint) -> gboolean;
+	pub fn jsc_options_set_boolean(option:*const c_char, value:gboolean) -> gboolean;
+	pub fn jsc_options_set_double(option:*const c_char, value:c_double) -> gboolean;
 	pub fn jsc_options_set_int(option:*const c_char, value:c_int) -> gboolean;
-	pub fn jsc_options_set_range_string(
-		option:*const c_char,
-		value:*const c_char,
-	) -> gboolean;
-	pub fn jsc_options_set_size(option:*const c_char, value:size_t)
-	-> gboolean;
-	pub fn jsc_options_set_string(
-		option:*const c_char,
-		value:*const c_char,
-	) -> gboolean;
-	pub fn jsc_options_set_uint(option:*const c_char, value:c_uint)
-	-> gboolean;
+	pub fn jsc_options_set_range_string(option:*const c_char, value:*const c_char) -> gboolean;
+	pub fn jsc_options_set_size(option:*const c_char, value:size_t) -> gboolean;
+	pub fn jsc_options_set_string(option:*const c_char, value:*const c_char) -> gboolean;
+	pub fn jsc_options_set_uint(option:*const c_char, value:c_uint) -> gboolean;
 
 }

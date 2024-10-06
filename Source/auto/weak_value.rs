@@ -26,11 +26,7 @@ impl WeakValue {
 
 	#[doc(alias = "jsc_weak_value_new")]
 	pub fn new(value:&impl IsA<Value>) -> WeakValue {
-		unsafe {
-			from_glib_full(ffi::jsc_weak_value_new(
-				value.as_ref().to_glib_none().0,
-			))
-		}
+		unsafe { from_glib_full(ffi::jsc_weak_value_new(value.as_ref().to_glib_none().0)) }
 	}
 
 	// rustdoc-stripper-ignore-next
@@ -65,8 +61,8 @@ impl WeakValueBuilder {
 
 	// rustdoc-stripper-ignore-next
 	/// Build the [`WeakValue`].
-	#[must_use = "Building the object from the builder is usually expensive \
-	              and is not expected to have side effects"]
+	#[must_use = "Building the object from the builder is usually expensive and is not expected to \
+	              have side effects"]
 	pub fn build(self) -> WeakValue { self.builder.build() }
 }
 
@@ -79,19 +75,12 @@ pub trait WeakValueExt: IsA<WeakValue> + sealed::Sealed + 'static {
 	#[doc(alias = "jsc_weak_value_get_value")]
 	#[doc(alias = "get_value")]
 	fn value(&self) -> Option<Value> {
-		unsafe {
-			from_glib_full(ffi::jsc_weak_value_get_value(
-				self.as_ref().to_glib_none().0,
-			))
-		}
+		unsafe { from_glib_full(ffi::jsc_weak_value_get_value(self.as_ref().to_glib_none().0)) }
 	}
 
 	#[doc(alias = "cleared")]
 	fn connect_cleared<F:Fn(&Self) + 'static>(&self, f:F) -> SignalHandlerId {
-		unsafe extern fn cleared_trampoline<
-			P:IsA<WeakValue>,
-			F:Fn(&P) + 'static,
-		>(
+		unsafe extern fn cleared_trampoline<P:IsA<WeakValue>, F:Fn(&P) + 'static>(
 			this:*mut ffi::JSCWeakValue,
 			f:glib::ffi::gpointer,
 		) {

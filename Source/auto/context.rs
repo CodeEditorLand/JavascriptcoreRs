@@ -6,13 +6,7 @@ use std::boxed::Box as Box_;
 
 use glib::{prelude::*, translate::*};
 
-use crate::{
-	CheckSyntaxMode,
-	CheckSyntaxResult,
-	Exception,
-	Value,
-	VirtualMachine,
-};
+use crate::{CheckSyntaxMode, CheckSyntaxResult, Exception, Value, VirtualMachine};
 
 glib::wrapper! {
 	#[doc(alias = "JSCContext")]
@@ -27,17 +21,13 @@ impl Context {
 	pub const NONE:Option<&'static Context> = None;
 
 	#[doc(alias = "jsc_context_new")]
-	pub fn new() -> Context {
-		unsafe { from_glib_full(ffi::jsc_context_new()) }
-	}
+	pub fn new() -> Context { unsafe { from_glib_full(ffi::jsc_context_new()) } }
 
 	#[doc(alias = "jsc_context_new_with_virtual_machine")]
 	#[doc(alias = "new_with_virtual_machine")]
 	pub fn with_virtual_machine(vm:&impl IsA<VirtualMachine>) -> Context {
 		unsafe {
-			from_glib_full(ffi::jsc_context_new_with_virtual_machine(
-				vm.as_ref().to_glib_none().0,
-			))
+			from_glib_full(ffi::jsc_context_new_with_virtual_machine(vm.as_ref().to_glib_none().0))
 		}
 	}
 
@@ -73,21 +63,16 @@ pub struct ContextBuilder {
 impl ContextBuilder {
 	fn new() -> Self { Self { builder:glib::object::Object::builder() } }
 
-	pub fn virtual_machine(
-		self,
-		virtual_machine:&impl IsA<VirtualMachine>,
-	) -> Self {
+	pub fn virtual_machine(self, virtual_machine:&impl IsA<VirtualMachine>) -> Self {
 		Self {
-			builder:self
-				.builder
-				.property("virtual-machine", virtual_machine.clone().upcast()),
+			builder:self.builder.property("virtual-machine", virtual_machine.clone().upcast()),
 		}
 	}
 
 	// rustdoc-stripper-ignore-next
 	/// Build the [`Context`].
-	#[must_use = "Building the object from the builder is usually expensive \
-	              and is not expected to have side effects"]
+	#[must_use = "Building the object from the builder is usually expensive and is not expected to \
+	              have side effects"]
 	pub fn build(self) -> Context { self.builder.build() }
 }
 
@@ -148,12 +133,7 @@ pub trait ContextExt: IsA<Context> + sealed::Sealed + 'static {
 	//}
 
 	#[doc(alias = "jsc_context_evaluate_with_source_uri")]
-	fn evaluate_with_source_uri(
-		&self,
-		code:&str,
-		uri:&str,
-		line_number:u32,
-	) -> Option<Value> {
+	fn evaluate_with_source_uri(&self, code:&str, uri:&str, line_number:u32) -> Option<Value> {
 		let length = code.len() as _;
 		unsafe {
 			from_glib_full(ffi::jsc_context_evaluate_with_source_uri(
@@ -169,20 +149,14 @@ pub trait ContextExt: IsA<Context> + sealed::Sealed + 'static {
 	#[doc(alias = "jsc_context_get_exception")]
 	#[doc(alias = "get_exception")]
 	fn exception(&self) -> Option<Exception> {
-		unsafe {
-			from_glib_none(ffi::jsc_context_get_exception(
-				self.as_ref().to_glib_none().0,
-			))
-		}
+		unsafe { from_glib_none(ffi::jsc_context_get_exception(self.as_ref().to_glib_none().0)) }
 	}
 
 	#[doc(alias = "jsc_context_get_global_object")]
 	#[doc(alias = "get_global_object")]
 	fn global_object(&self) -> Option<Value> {
 		unsafe {
-			from_glib_full(ffi::jsc_context_get_global_object(
-				self.as_ref().to_glib_none().0,
-			))
+			from_glib_full(ffi::jsc_context_get_global_object(self.as_ref().to_glib_none().0))
 		}
 	}
 
@@ -201,26 +175,19 @@ pub trait ContextExt: IsA<Context> + sealed::Sealed + 'static {
 	#[doc(alias = "get_virtual_machine")]
 	fn virtual_machine(&self) -> Option<VirtualMachine> {
 		unsafe {
-			from_glib_none(ffi::jsc_context_get_virtual_machine(
-				self.as_ref().to_glib_none().0,
-			))
+			from_glib_none(ffi::jsc_context_get_virtual_machine(self.as_ref().to_glib_none().0))
 		}
 	}
 
 	#[doc(alias = "jsc_context_pop_exception_handler")]
 	fn pop_exception_handler(&self) {
 		unsafe {
-			ffi::jsc_context_pop_exception_handler(
-				self.as_ref().to_glib_none().0,
-			);
+			ffi::jsc_context_pop_exception_handler(self.as_ref().to_glib_none().0);
 		}
 	}
 
 	#[doc(alias = "jsc_context_push_exception_handler")]
-	fn push_exception_handler<P:Fn(&Context, &Exception) + 'static>(
-		&self,
-		handler:P,
-	) {
+	fn push_exception_handler<P:Fn(&Context, &Exception) + 'static>(&self, handler:P) {
 		let handler_data:Box_<P> = Box_::new(handler);
 		unsafe extern fn handler_func<P:Fn(&Context, &Exception) + 'static>(
 			context:*mut ffi::JSCContext,
@@ -233,9 +200,7 @@ pub trait ContextExt: IsA<Context> + sealed::Sealed + 'static {
 			(*callback)(&context, &exception)
 		}
 		let handler = Some(handler_func::<P> as _);
-		unsafe extern fn destroy_notify_func<
-			P:Fn(&Context, &Exception) + 'static,
-		>(
+		unsafe extern fn destroy_notify_func<P:Fn(&Context, &Exception) + 'static>(
 			data:glib::ffi::gpointer,
 		) {
 			let _callback:Box_<P> = Box_::from_raw(data as *mut _);
@@ -272,10 +237,7 @@ pub trait ContextExt: IsA<Context> + sealed::Sealed + 'static {
 	#[doc(alias = "jsc_context_throw")]
 	fn throw(&self, error_message:&str) {
 		unsafe {
-			ffi::jsc_context_throw(
-				self.as_ref().to_glib_none().0,
-				error_message.to_glib_none().0,
-			);
+			ffi::jsc_context_throw(self.as_ref().to_glib_none().0, error_message.to_glib_none().0);
 		}
 	}
 

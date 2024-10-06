@@ -38,9 +38,5 @@ pub(crate) mod traits {
 	};
 }
 pub(crate) mod builders {
-	pub use super::{
-		context::ContextBuilder,
-		value::ValueBuilder,
-		weak_value::WeakValueBuilder,
-	};
+	pub use super::{context::ContextBuilder, value::ValueBuilder, weak_value::WeakValueBuilder};
 }

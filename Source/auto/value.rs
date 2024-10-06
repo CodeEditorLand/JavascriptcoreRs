@@ -22,10 +22,7 @@ impl Value {
 	pub const NONE:Option<&'static Value> = None;
 
 	#[doc(alias = "jsc_value_new_array_from_garray")]
-	pub fn new_array_from_garray(
-		context:&impl IsA<Context>,
-		array:&[Value],
-	) -> Value {
+	pub fn new_array_from_garray(context:&impl IsA<Context>, array:&[Value]) -> Value {
 		unsafe {
 			from_glib_full(ffi::jsc_value_new_array_from_garray(
 				context.as_ref().to_glib_none().0,
@@ -35,10 +32,7 @@ impl Value {
 	}
 
 	#[doc(alias = "jsc_value_new_array_from_strv")]
-	pub fn new_array_from_strv(
-		context:&impl IsA<Context>,
-		strv:&[&str],
-	) -> Value {
+	pub fn new_array_from_strv(context:&impl IsA<Context>, strv:&[&str]) -> Value {
 		unsafe {
 			from_glib_full(ffi::jsc_value_new_array_from_strv(
 				context.as_ref().to_glib_none().0,
@@ -96,20 +90,13 @@ impl Value {
 
 	#[doc(alias = "jsc_value_new_null")]
 	pub fn new_null(context:&impl IsA<Context>) -> Value {
-		unsafe {
-			from_glib_full(ffi::jsc_value_new_null(
-				context.as_ref().to_glib_none().0,
-			))
-		}
+		unsafe { from_glib_full(ffi::jsc_value_new_null(context.as_ref().to_glib_none().0)) }
 	}
 
 	#[doc(alias = "jsc_value_new_number")]
 	pub fn new_number(context:&impl IsA<Context>, number:f64) -> Value {
 		unsafe {
-			from_glib_full(ffi::jsc_value_new_number(
-				context.as_ref().to_glib_none().0,
-				number,
-			))
+			from_glib_full(ffi::jsc_value_new_number(context.as_ref().to_glib_none().0, number))
 		}
 	}
 
@@ -120,10 +107,7 @@ impl Value {
 	//}
 
 	#[doc(alias = "jsc_value_new_string")]
-	pub fn new_string(
-		context:&impl IsA<Context>,
-		string:Option<&str>,
-	) -> Value {
+	pub fn new_string(context:&impl IsA<Context>, string:Option<&str>) -> Value {
 		unsafe {
 			from_glib_full(ffi::jsc_value_new_string(
 				context.as_ref().to_glib_none().0,
@@ -133,10 +117,7 @@ impl Value {
 	}
 
 	#[doc(alias = "jsc_value_new_string_from_bytes")]
-	pub fn new_string_from_bytes(
-		context:&impl IsA<Context>,
-		bytes:Option<&glib::Bytes>,
-	) -> Value {
+	pub fn new_string_from_bytes(context:&impl IsA<Context>, bytes:Option<&glib::Bytes>) -> Value {
 		unsafe {
 			from_glib_full(ffi::jsc_value_new_string_from_bytes(
 				context.as_ref().to_glib_none().0,
@@ -164,11 +145,7 @@ impl Value {
 
 	#[doc(alias = "jsc_value_new_undefined")]
 	pub fn new_undefined(context:&impl IsA<Context>) -> Value {
-		unsafe {
-			from_glib_full(ffi::jsc_value_new_undefined(
-				context.as_ref().to_glib_none().0,
-			))
-		}
+		unsafe { from_glib_full(ffi::jsc_value_new_undefined(context.as_ref().to_glib_none().0)) }
 	}
 
 	// rustdoc-stripper-ignore-next
@@ -201,15 +178,13 @@ impl ValueBuilder {
 	fn new() -> Self { Self { builder:glib::object::Object::builder() } }
 
 	pub fn context(self, context:&impl IsA<Context>) -> Self {
-		Self {
-			builder:self.builder.property("context", context.clone().upcast()),
-		}
+		Self { builder:self.builder.property("context", context.clone().upcast()) }
 	}
 
 	// rustdoc-stripper-ignore-next
 	/// Build the [`Value`].
-	#[must_use = "Building the object from the builder is usually expensive \
-	              and is not expected to have side effects"]
+	#[must_use = "Building the object from the builder is usually expensive and is not expected to \
+	              have side effects"]
 	pub fn build(self) -> Value { self.builder.build() }
 }
 
@@ -223,9 +198,7 @@ pub trait ValueExt: IsA<Value> + sealed::Sealed + 'static {
 	#[cfg_attr(docsrs, doc(cfg(feature = "v2_38")))]
 	#[doc(alias = "jsc_value_array_buffer_get_size")]
 	fn array_buffer_get_size(&self) -> usize {
-		unsafe {
-			ffi::jsc_value_array_buffer_get_size(self.as_ref().to_glib_none().0)
-		}
+		unsafe { ffi::jsc_value_array_buffer_get_size(self.as_ref().to_glib_none().0) }
 	}
 
 	//#[doc(alias = "jsc_value_constructor_call")]
@@ -271,102 +244,66 @@ pub trait ValueExt: IsA<Value> + sealed::Sealed + 'static {
 	#[doc(alias = "jsc_value_get_context")]
 	#[doc(alias = "get_context")]
 	fn context(&self) -> Option<Context> {
-		unsafe {
-			from_glib_none(ffi::jsc_value_get_context(
-				self.as_ref().to_glib_none().0,
-			))
-		}
+		unsafe { from_glib_none(ffi::jsc_value_get_context(self.as_ref().to_glib_none().0)) }
 	}
 
 	#[doc(alias = "jsc_value_is_array")]
 	fn is_array(&self) -> bool {
-		unsafe {
-			from_glib(ffi::jsc_value_is_array(self.as_ref().to_glib_none().0))
-		}
+		unsafe { from_glib(ffi::jsc_value_is_array(self.as_ref().to_glib_none().0)) }
 	}
 
 	#[cfg(feature = "v2_38")]
 	#[cfg_attr(docsrs, doc(cfg(feature = "v2_38")))]
 	#[doc(alias = "jsc_value_is_array_buffer")]
 	fn is_array_buffer(&self) -> bool {
-		unsafe {
-			from_glib(ffi::jsc_value_is_array_buffer(
-				self.as_ref().to_glib_none().0,
-			))
-		}
+		unsafe { from_glib(ffi::jsc_value_is_array_buffer(self.as_ref().to_glib_none().0)) }
 	}
 
 	#[doc(alias = "jsc_value_is_boolean")]
 	fn is_boolean(&self) -> bool {
-		unsafe {
-			from_glib(ffi::jsc_value_is_boolean(self.as_ref().to_glib_none().0))
-		}
+		unsafe { from_glib(ffi::jsc_value_is_boolean(self.as_ref().to_glib_none().0)) }
 	}
 
 	#[doc(alias = "jsc_value_is_constructor")]
 	fn is_constructor(&self) -> bool {
-		unsafe {
-			from_glib(ffi::jsc_value_is_constructor(
-				self.as_ref().to_glib_none().0,
-			))
-		}
+		unsafe { from_glib(ffi::jsc_value_is_constructor(self.as_ref().to_glib_none().0)) }
 	}
 
 	#[doc(alias = "jsc_value_is_function")]
 	fn is_function(&self) -> bool {
-		unsafe {
-			from_glib(ffi::jsc_value_is_function(
-				self.as_ref().to_glib_none().0,
-			))
-		}
+		unsafe { from_glib(ffi::jsc_value_is_function(self.as_ref().to_glib_none().0)) }
 	}
 
 	#[doc(alias = "jsc_value_is_null")]
 	fn is_null(&self) -> bool {
-		unsafe {
-			from_glib(ffi::jsc_value_is_null(self.as_ref().to_glib_none().0))
-		}
+		unsafe { from_glib(ffi::jsc_value_is_null(self.as_ref().to_glib_none().0)) }
 	}
 
 	#[doc(alias = "jsc_value_is_number")]
 	fn is_number(&self) -> bool {
-		unsafe {
-			from_glib(ffi::jsc_value_is_number(self.as_ref().to_glib_none().0))
-		}
+		unsafe { from_glib(ffi::jsc_value_is_number(self.as_ref().to_glib_none().0)) }
 	}
 
 	#[doc(alias = "jsc_value_is_object")]
 	fn is_object(&self) -> bool {
-		unsafe {
-			from_glib(ffi::jsc_value_is_object(self.as_ref().to_glib_none().0))
-		}
+		unsafe { from_glib(ffi::jsc_value_is_object(self.as_ref().to_glib_none().0)) }
 	}
 
 	#[doc(alias = "jsc_value_is_string")]
 	fn is_string(&self) -> bool {
-		unsafe {
-			from_glib(ffi::jsc_value_is_string(self.as_ref().to_glib_none().0))
-		}
+		unsafe { from_glib(ffi::jsc_value_is_string(self.as_ref().to_glib_none().0)) }
 	}
 
 	#[cfg(feature = "v2_38")]
 	#[cfg_attr(docsrs, doc(cfg(feature = "v2_38")))]
 	#[doc(alias = "jsc_value_is_typed_array")]
 	fn is_typed_array(&self) -> bool {
-		unsafe {
-			from_glib(ffi::jsc_value_is_typed_array(
-				self.as_ref().to_glib_none().0,
-			))
-		}
+		unsafe { from_glib(ffi::jsc_value_is_typed_array(self.as_ref().to_glib_none().0)) }
 	}
 
 	#[doc(alias = "jsc_value_is_undefined")]
 	fn is_undefined(&self) -> bool {
-		unsafe {
-			from_glib(ffi::jsc_value_is_undefined(
-				self.as_ref().to_glib_none().0,
-			))
-		}
+		unsafe { from_glib(ffi::jsc_value_is_undefined(self.as_ref().to_glib_none().0)) }
 	}
 
 	#[cfg(feature = "v2_38")]
@@ -427,11 +364,9 @@ pub trait ValueExt: IsA<Value> + sealed::Sealed + 'static {
 	#[doc(alias = "jsc_value_object_enumerate_properties")]
 	fn object_enumerate_properties(&self) -> Vec<glib::GString> {
 		unsafe {
-			FromGlibPtrContainer::from_glib_full(
-				ffi::jsc_value_object_enumerate_properties(
-					self.as_ref().to_glib_none().0,
-				),
-			)
+			FromGlibPtrContainer::from_glib_full(ffi::jsc_value_object_enumerate_properties(
+				self.as_ref().to_glib_none().0,
+			))
 		}
 	}
 
@@ -477,11 +412,7 @@ pub trait ValueExt: IsA<Value> + sealed::Sealed + 'static {
 
 	#[doc(alias = "jsc_value_object_invoke_methodv")]
 	#[must_use]
-	fn object_invoke_methodv(
-		&self,
-		name:&str,
-		parameters:&[Value],
-	) -> Option<Value> {
+	fn object_invoke_methodv(&self, name:&str, parameters:&[Value]) -> Option<Value> {
 		let n_parameters = parameters.len() as _;
 		unsafe {
 			from_glib_full(ffi::jsc_value_object_invoke_methodv(
@@ -515,11 +446,7 @@ pub trait ValueExt: IsA<Value> + sealed::Sealed + 'static {
 	}
 
 	#[doc(alias = "jsc_value_object_set_property_at_index")]
-	fn object_set_property_at_index(
-		&self,
-		index:u32,
-		property:&impl IsA<Value>,
-	) {
+	fn object_set_property_at_index(&self, index:u32, property:&impl IsA<Value>) {
 		unsafe {
 			ffi::jsc_value_object_set_property_at_index(
 				self.as_ref().to_glib_none().0,
@@ -531,9 +458,7 @@ pub trait ValueExt: IsA<Value> + sealed::Sealed + 'static {
 
 	#[doc(alias = "jsc_value_to_boolean")]
 	fn to_boolean(&self) -> bool {
-		unsafe {
-			from_glib(ffi::jsc_value_to_boolean(self.as_ref().to_glib_none().0))
-		}
+		unsafe { from_glib(ffi::jsc_value_to_boolean(self.as_ref().to_glib_none().0)) }
 	}
 
 	#[doc(alias = "jsc_value_to_double")]
@@ -542,39 +467,24 @@ pub trait ValueExt: IsA<Value> + sealed::Sealed + 'static {
 	}
 
 	#[doc(alias = "jsc_value_to_int32")]
-	fn to_int32(&self) -> i32 {
-		unsafe { ffi::jsc_value_to_int32(self.as_ref().to_glib_none().0) }
-	}
+	fn to_int32(&self) -> i32 { unsafe { ffi::jsc_value_to_int32(self.as_ref().to_glib_none().0) } }
 
 	#[cfg(feature = "v2_28")]
 	#[cfg_attr(docsrs, doc(cfg(feature = "v2_28")))]
 	#[doc(alias = "jsc_value_to_json")]
 	fn to_json(&self, indent:u32) -> Option<glib::GString> {
-		unsafe {
-			from_glib_full(ffi::jsc_value_to_json(
-				self.as_ref().to_glib_none().0,
-				indent,
-			))
-		}
+		unsafe { from_glib_full(ffi::jsc_value_to_json(self.as_ref().to_glib_none().0, indent)) }
 	}
 
 	#[doc(alias = "jsc_value_to_string")]
 	#[doc(alias = "to_string")]
 	fn to_str(&self) -> glib::GString {
-		unsafe {
-			from_glib_full(ffi::jsc_value_to_string(
-				self.as_ref().to_glib_none().0,
-			))
-		}
+		unsafe { from_glib_full(ffi::jsc_value_to_string(self.as_ref().to_glib_none().0)) }
 	}
 
 	#[doc(alias = "jsc_value_to_string_as_bytes")]
 	fn to_string_as_bytes(&self) -> Option<glib::Bytes> {
-		unsafe {
-			from_glib_full(ffi::jsc_value_to_string_as_bytes(
-				self.as_ref().to_glib_none().0,
-			))
-		}
+		unsafe { from_glib_full(ffi::jsc_value_to_string_as_bytes(self.as_ref().to_glib_none().0)) }
 	}
 
 	#[cfg(feature = "v2_38")]
@@ -583,9 +493,7 @@ pub trait ValueExt: IsA<Value> + sealed::Sealed + 'static {
 	#[must_use]
 	fn typed_array_get_buffer(&self) -> Option<Value> {
 		unsafe {
-			from_glib_full(ffi::jsc_value_typed_array_get_buffer(
-				self.as_ref().to_glib_none().0,
-			))
+			from_glib_full(ffi::jsc_value_typed_array_get_buffer(self.as_ref().to_glib_none().0))
 		}
 	}
 
@@ -593,42 +501,28 @@ pub trait ValueExt: IsA<Value> + sealed::Sealed + 'static {
 	#[cfg_attr(docsrs, doc(cfg(feature = "v2_38")))]
 	#[doc(alias = "jsc_value_typed_array_get_length")]
 	fn typed_array_get_length(&self) -> usize {
-		unsafe {
-			ffi::jsc_value_typed_array_get_length(
-				self.as_ref().to_glib_none().0,
-			)
-		}
+		unsafe { ffi::jsc_value_typed_array_get_length(self.as_ref().to_glib_none().0) }
 	}
 
 	#[cfg(feature = "v2_38")]
 	#[cfg_attr(docsrs, doc(cfg(feature = "v2_38")))]
 	#[doc(alias = "jsc_value_typed_array_get_offset")]
 	fn typed_array_get_offset(&self) -> usize {
-		unsafe {
-			ffi::jsc_value_typed_array_get_offset(
-				self.as_ref().to_glib_none().0,
-			)
-		}
+		unsafe { ffi::jsc_value_typed_array_get_offset(self.as_ref().to_glib_none().0) }
 	}
 
 	#[cfg(feature = "v2_38")]
 	#[cfg_attr(docsrs, doc(cfg(feature = "v2_38")))]
 	#[doc(alias = "jsc_value_typed_array_get_size")]
 	fn typed_array_get_size(&self) -> usize {
-		unsafe {
-			ffi::jsc_value_typed_array_get_size(self.as_ref().to_glib_none().0)
-		}
+		unsafe { ffi::jsc_value_typed_array_get_size(self.as_ref().to_glib_none().0) }
 	}
 
 	#[cfg(feature = "v2_38")]
 	#[cfg_attr(docsrs, doc(cfg(feature = "v2_38")))]
 	#[doc(alias = "jsc_value_typed_array_get_type")]
 	fn typed_array_get_type(&self) -> TypedArrayType {
-		unsafe {
-			from_glib(ffi::jsc_value_typed_array_get_type(
-				self.as_ref().to_glib_none().0,
-			))
-		}
+		unsafe { from_glib(ffi::jsc_value_typed_array_get_type(self.as_ref().to_glib_none().0)) }
 	}
 }
 

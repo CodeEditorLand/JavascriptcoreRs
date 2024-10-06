@@ -42,11 +42,7 @@ impl Exception {
 
 	#[doc(alias = "jsc_exception_new_with_name")]
 	#[doc(alias = "new_with_name")]
-	pub fn with_name(
-		context:&impl IsA<Context>,
-		name:&str,
-		message:&str,
-	) -> Exception {
+	pub fn with_name(context:&impl IsA<Context>, name:&str, message:&str) -> Exception {
 		unsafe {
 			from_glib_full(ffi::jsc_exception_new_with_name(
 				context.as_ref().to_glib_none().0,
@@ -90,75 +86,49 @@ pub trait ExceptionExt: IsA<Exception> + sealed::Sealed + 'static {
 	#[doc(alias = "get_backtrace_string")]
 	fn backtrace_string(&self) -> Option<glib::GString> {
 		unsafe {
-			from_glib_none(ffi::jsc_exception_get_backtrace_string(
-				self.as_ref().to_glib_none().0,
-			))
+			from_glib_none(ffi::jsc_exception_get_backtrace_string(self.as_ref().to_glib_none().0))
 		}
 	}
 
 	#[doc(alias = "jsc_exception_get_column_number")]
 	#[doc(alias = "get_column_number")]
 	fn column_number(&self) -> u32 {
-		unsafe {
-			ffi::jsc_exception_get_column_number(self.as_ref().to_glib_none().0)
-		}
+		unsafe { ffi::jsc_exception_get_column_number(self.as_ref().to_glib_none().0) }
 	}
 
 	#[doc(alias = "jsc_exception_get_line_number")]
 	#[doc(alias = "get_line_number")]
 	fn line_number(&self) -> u32 {
-		unsafe {
-			ffi::jsc_exception_get_line_number(self.as_ref().to_glib_none().0)
-		}
+		unsafe { ffi::jsc_exception_get_line_number(self.as_ref().to_glib_none().0) }
 	}
 
 	#[doc(alias = "jsc_exception_get_message")]
 	#[doc(alias = "get_message")]
 	fn message(&self) -> Option<glib::GString> {
-		unsafe {
-			from_glib_none(ffi::jsc_exception_get_message(
-				self.as_ref().to_glib_none().0,
-			))
-		}
+		unsafe { from_glib_none(ffi::jsc_exception_get_message(self.as_ref().to_glib_none().0)) }
 	}
 
 	#[doc(alias = "jsc_exception_get_name")]
 	#[doc(alias = "get_name")]
 	fn name(&self) -> Option<glib::GString> {
-		unsafe {
-			from_glib_none(ffi::jsc_exception_get_name(
-				self.as_ref().to_glib_none().0,
-			))
-		}
+		unsafe { from_glib_none(ffi::jsc_exception_get_name(self.as_ref().to_glib_none().0)) }
 	}
 
 	#[doc(alias = "jsc_exception_get_source_uri")]
 	#[doc(alias = "get_source_uri")]
 	fn source_uri(&self) -> Option<glib::GString> {
-		unsafe {
-			from_glib_none(ffi::jsc_exception_get_source_uri(
-				self.as_ref().to_glib_none().0,
-			))
-		}
+		unsafe { from_glib_none(ffi::jsc_exception_get_source_uri(self.as_ref().to_glib_none().0)) }
 	}
 
 	#[doc(alias = "jsc_exception_report")]
 	fn report(&self) -> Option<glib::GString> {
-		unsafe {
-			from_glib_full(ffi::jsc_exception_report(
-				self.as_ref().to_glib_none().0,
-			))
-		}
+		unsafe { from_glib_full(ffi::jsc_exception_report(self.as_ref().to_glib_none().0)) }
 	}
 
 	#[doc(alias = "jsc_exception_to_string")]
 	#[doc(alias = "to_string")]
 	fn to_str(&self) -> glib::GString {
-		unsafe {
-			from_glib_full(ffi::jsc_exception_to_string(
-				self.as_ref().to_glib_none().0,
-			))
-		}
+		unsafe { from_glib_full(ffi::jsc_exception_to_string(self.as_ref().to_glib_none().0)) }
 	}
 }
 

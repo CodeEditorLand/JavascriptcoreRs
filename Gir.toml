@@ -11,29 +11,29 @@ work_mode = "normal"
 external_libraries = ["GLib", "GObject"]
 
 generate = [
-  "JavaScriptCore.CheckSyntaxMode",
-  "JavaScriptCore.CheckSyntaxResult",
-  "JavaScriptCore.Class",
-  "JavaScriptCore.ClassDeletePropertyFunction",
-  "JavaScriptCore.ClassEnumeratePropertiesFunction",
-  "JavaScriptCore.ClassGetPropertyFunction",
-  "JavaScriptCore.ClassHasPropertyFunction",
-  "JavaScriptCore.ClassSetPropertyFunction",
-  # "JavaScriptCore.ClassVTable",
-  "JavaScriptCore.Exception",
-  "JavaScriptCore.ExceptionHandler",
-  "JavaScriptCore.OptionsFunc",
-  "JavaScriptCore.OptionType",
-  "JavaScriptCore.TypedArrayType",
-  "JavaScriptCore.ValuePropertyFlags",
-  "JavaScriptCore.VirtualMachine",
+	"JavaScriptCore.CheckSyntaxMode",
+	"JavaScriptCore.CheckSyntaxResult",
+	"JavaScriptCore.Class",
+	"JavaScriptCore.ClassDeletePropertyFunction",
+	"JavaScriptCore.ClassEnumeratePropertiesFunction",
+	"JavaScriptCore.ClassGetPropertyFunction",
+	"JavaScriptCore.ClassHasPropertyFunction",
+	"JavaScriptCore.ClassSetPropertyFunction",
+	# "JavaScriptCore.ClassVTable",
+	"JavaScriptCore.Exception",
+	"JavaScriptCore.ExceptionHandler",
+	"JavaScriptCore.OptionsFunc",
+	"JavaScriptCore.OptionType",
+	"JavaScriptCore.TypedArrayType",
+	"JavaScriptCore.ValuePropertyFlags",
+	"JavaScriptCore.VirtualMachine",
 ]
 
 manual = [
-  "GLib.Bytes",
-  "GLib.DestroyNotify",
-  "GLib.OptionGroup",
-  "GObject.Callback",
+	"GLib.Bytes",
+	"GLib.DestroyNotify",
+	"GLib.OptionGroup",
+	"GObject.Callback",
 ]
 
 [[object]]
@@ -45,18 +45,18 @@ status = "generate"
 generate_builder = true
 name = "JavaScriptCore.Value"
 status = "generate"
-    [[object.function]]
-    name = "new_array"
-    ignore = true
-    [[object.function]]
-    name = "new_array_buffer"
-    manual = true
-    [[object.function]]
-    name = "array_buffer_get_data"
-    manual = true
-    [[object.function]]
-    name = "typed_array_get_data"
-    manual = true
+[[object.function]]
+name = "new_array"
+ignore = true
+[[object.function]]
+name = "new_array_buffer"
+manual = true
+[[object.function]]
+name = "array_buffer_get_data"
+manual = true
+[[object.function]]
+name = "typed_array_get_data"
+manual = true
 
 # [[object.function]]
 # ignore = true

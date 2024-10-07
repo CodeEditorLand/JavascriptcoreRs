@@ -31,13 +31,13 @@ name = "javascriptcore_rs_sys"
 libc = "0.2"
 
 [dependencies.glib]
-package = "glib-sys"
 version = 0.18"
 
 [dependencies.gobject]
 package = "gobject-sys"
 version = 0.18"
 
+package = "glib-sys"
 [build-dependencies]
 system-deps = "6"
 

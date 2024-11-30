@@ -10,10 +10,12 @@ impl Value {
 	#[doc(alias = "jsc_value_new_array_buffer")]
 	pub fn new_array_buffer(context:&impl IsA<Context>, data:glib::Bytes) -> Option<Value> {
 		let len = data.len();
+
 		let ptr:*mut GBytes = data.to_glib_full();
 
 		unsafe extern fn destroy_notify(user_data:*mut c_void) {
 			let data:glib::Bytes = from_glib_full(user_data as *mut GBytes);
+
 			drop(data);
 		}
 
@@ -47,8 +49,10 @@ impl<O:IsA<Value>> ValueExtManual for O {
 	fn array_buffer_get_data(&self) -> &[u8] {
 		unsafe {
 			let mut len = 0;
+
 			let ptr =
 				ffi::jsc_value_array_buffer_get_data(self.as_ref().to_glib_none().0, &mut len);
+
 			if ptr.is_null() || len == 0 {
 				&[]
 			} else {
@@ -61,9 +65,12 @@ impl<O:IsA<Value>> ValueExtManual for O {
 	#[cfg_attr(docsrs, doc(cfg(feature = "v2_38")))]
 	fn typed_array_get_data(&self) -> TypedArrayData {
 		use crate::TypedArrayType::*;
+
 		unsafe {
 			let mut len = 0;
+
 			let ptr = ffi::jsc_value_typed_array_get_data(self.as_ref().to_glib_none().0, &mut len);
+
 			if ptr.is_null() || len == 0 {
 				TypedArrayData::None
 			} else {

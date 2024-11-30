@@ -190,6 +190,7 @@ impl ValueBuilder {
 
 mod sealed {
 	pub trait Sealed {}
+
 	impl<T:super::IsA<super::Value>> Sealed for T {}
 }
 
@@ -212,6 +213,7 @@ pub trait ValueExt: IsA<Value> + sealed::Sealed + 'static {
 	#[must_use]
 	fn constructor_callv(&self, parameters:&[Value]) -> Option<Value> {
 		let n_parameters = parameters.len() as _;
+
 		unsafe {
 			from_glib_full(ffi::jsc_value_constructor_callv(
 				self.as_ref().to_glib_none().0,
@@ -232,6 +234,7 @@ pub trait ValueExt: IsA<Value> + sealed::Sealed + 'static {
 	#[must_use]
 	fn function_callv(&self, parameters:&[Value]) -> Option<Value> {
 		let n_parameters = parameters.len() as _;
+
 		unsafe {
 			from_glib_full(ffi::jsc_value_function_callv(
 				self.as_ref().to_glib_none().0,
@@ -414,6 +417,7 @@ pub trait ValueExt: IsA<Value> + sealed::Sealed + 'static {
 	#[must_use]
 	fn object_invoke_methodv(&self, name:&str, parameters:&[Value]) -> Option<Value> {
 		let n_parameters = parameters.len() as _;
+
 		unsafe {
 			from_glib_full(ffi::jsc_value_object_invoke_methodv(
 				self.as_ref().to_glib_none().0,

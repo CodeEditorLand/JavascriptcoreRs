@@ -78,6 +78,7 @@ impl std::fmt::Display for Exception {
 
 mod sealed {
 	pub trait Sealed {}
+
 	impl<T:super::IsA<super::Exception>> Sealed for T {}
 }
 

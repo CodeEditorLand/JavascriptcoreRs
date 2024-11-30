@@ -68,6 +68,7 @@ impl WeakValueBuilder {
 
 mod sealed {
 	pub trait Sealed {}
+
 	impl<T:super::IsA<super::WeakValue>> Sealed for T {}
 }
 
@@ -85,10 +86,13 @@ pub trait WeakValueExt: IsA<WeakValue> + sealed::Sealed + 'static {
 			f:glib::ffi::gpointer,
 		) {
 			let f:&F = &*(f as *const F);
+
 			f(WeakValue::from_glib_borrow(this).unsafe_cast_ref())
 		}
+
 		unsafe {
 			let f:Box_<F> = Box_::new(f);
+
 			connect_raw(
 				self.as_ptr() as *mut _,
 				b"cleared\0".as_ptr() as *const _,

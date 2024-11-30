@@ -78,6 +78,7 @@ impl ContextBuilder {
 
 mod sealed {
 	pub trait Sealed {}
+
 	impl<T:super::IsA<super::Context>> Sealed for T {}
 }
 
@@ -91,8 +92,10 @@ pub trait ContextExt: IsA<Context> + sealed::Sealed + 'static {
 		line_number:u32,
 	) -> (CheckSyntaxResult, Exception) {
 		let length = code.len() as _;
+
 		unsafe {
 			let mut exception = std::ptr::null_mut();
+
 			let ret = from_glib(ffi::jsc_context_check_syntax(
 				self.as_ref().to_glib_none().0,
 				code.to_glib_none().0,
@@ -116,6 +119,7 @@ pub trait ContextExt: IsA<Context> + sealed::Sealed + 'static {
 	#[doc(alias = "jsc_context_evaluate")]
 	fn evaluate(&self, code:&str) -> Option<Value> {
 		let length = code.len() as _;
+
 		unsafe {
 			from_glib_full(ffi::jsc_context_evaluate(
 				self.as_ref().to_glib_none().0,
@@ -135,6 +139,7 @@ pub trait ContextExt: IsA<Context> + sealed::Sealed + 'static {
 	#[doc(alias = "jsc_context_evaluate_with_source_uri")]
 	fn evaluate_with_source_uri(&self, code:&str, uri:&str, line_number:u32) -> Option<Value> {
 		let length = code.len() as _;
+
 		unsafe {
 			from_glib_full(ffi::jsc_context_evaluate_with_source_uri(
 				self.as_ref().to_glib_none().0,
@@ -189,24 +194,32 @@ pub trait ContextExt: IsA<Context> + sealed::Sealed + 'static {
 	#[doc(alias = "jsc_context_push_exception_handler")]
 	fn push_exception_handler<P:Fn(&Context, &Exception) + 'static>(&self, handler:P) {
 		let handler_data:Box_<P> = Box_::new(handler);
+
 		unsafe extern fn handler_func<P:Fn(&Context, &Exception) + 'static>(
 			context:*mut ffi::JSCContext,
 			exception:*mut ffi::JSCException,
 			user_data:glib::ffi::gpointer,
 		) {
 			let context = from_glib_borrow(context);
+
 			let exception = from_glib_borrow(exception);
+
 			let callback:&P = &*(user_data as *mut _);
 			(*callback)(&context, &exception)
 		}
+
 		let handler = Some(handler_func::<P> as _);
+
 		unsafe extern fn destroy_notify_func<P:Fn(&Context, &Exception) + 'static>(
 			data:glib::ffi::gpointer,
 		) {
 			let _callback:Box_<P> = Box_::from_raw(data as *mut _);
 		}
+
 		let destroy_call3 = Some(destroy_notify_func::<P> as _);
+
 		let super_callback0:Box_<P> = handler_data;
+
 		unsafe {
 			ffi::jsc_context_push_exception_handler(
 				self.as_ref().to_glib_none().0,

@@ -28,7 +28,7 @@ all-features = true
 name = "javascriptcore_rs_sys"
 
 [dependencies]
-libc = "0.2"
+libc = { version = "0.2" }
 
 [dependencies.glib]
 version = 0.18"
@@ -43,7 +43,7 @@ system-deps = "6"
 
 [dev-dependencies]
 shell-words = "1.0.0"
-tempfile = "3"
+tempfile = { version = "3" }
 
 [features]
 v2_28 = []
